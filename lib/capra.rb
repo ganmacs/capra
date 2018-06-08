@@ -1,4 +1,4 @@
-require "capra/version"
+require 'capra/version'
 
 module Capra
   # Your code goes here...
