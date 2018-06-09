@@ -22,7 +22,7 @@ module Capra
     def build
       @backend = build_backend
 
-      lb = LoadBlancer.new(@addr, @port, @backend)
+      lb = LoadBlancer.new(@addr, @port, 128, 5, @backend) # XXX
       lb_value = Proc.new { lb }
 
       Module.new do
