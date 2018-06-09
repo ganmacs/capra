@@ -5,8 +5,8 @@ class SimpleServer
     @addr = addr
     @port = port
     @logger = logger
-    @server = start_server
     @id = id
+    @server = start_server
 
     install_singnal_handle
     setup

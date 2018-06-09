@@ -3,16 +3,16 @@ require 'capra/backends'
 
 module Capra
   class ServerBuilder
-    def self.build(addr, port, workers:, backend_type:)
+    def self.build(addr:, port:, workers:, backend_type:)
       new(
-        addr,
-        port,
+        addr: addr,
+        port: port,
         workers: workers,
         backend_type: backend_type,
       ).build
     end
 
-    def initialize(addr, port, workers:, backend_type:)
+    def initialize(addr:, port:, workers:, backend_type:)
       @addr = addr
       @port = port
       @workers = workers
@@ -51,7 +51,8 @@ module Capra
     end
 
     def backend_class
-      if @backend_type == 'round_robin'
+      t = @backend_type.to_sym
+      if t == :round_robin
         Capra::Backends::RoundRobin
       else
         raise 'not support yet'

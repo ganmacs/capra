@@ -1,34 +1,38 @@
-require 'load_balancer'
 require 'optparse'
-require 'pathname'
+require 'capra/dsl'
+require 'capra/application'
 
 module Capra
   class CLI
-    def self.run(args)
-      new.run(args)
+    DEFAULT_CONFIG_PATH = 'capra.ru'.freeze
+
+    def self.run(argv)
+      new.run(argv)
     end
 
-    def run
-      parse!
+    def run(argv)
+      parse!(argv)
+      config = DSL.evaulate(@opts, @config_path)
+      Application.run(config)
     end
 
     private
 
-    def parse!
-      @config_path = 'capra'
-      @host = '127.0.0.1'
-      @port = '8000'
-      @backends = []
+    def initialize
+      @opts = {}
+    end
+
+    def parse!(argv)
       parser.parse!(argv)
+      @config_path = argv.first || DEFAULT_CONFIG_PATH
     end
 
     def parser
       @parser ||= OptionParser.new do |opts|
-        opts.banner = 'capra'
+        opts.banner = 'capra [OPTIONS] [FILE]'
         opts.version = VERSION
-        opts.on('-c', '--config', 'config file path') { @config_path = true }
-        opts.on('--adder', 'address') { |v| @addr = v }
-        opts.on('--port',  'port') { |v| @port = v }
+        opts.on('--adder', 'address') { |v| @opts[:addr] = v }
+        opts.on('--port',  'port') { |v| @opts[:port] = v }
       end
     end
   end

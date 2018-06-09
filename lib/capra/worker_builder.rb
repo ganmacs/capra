@@ -1,41 +1,33 @@
 module Capra
   class WorkerBuilder
-    class Context
-      attr_reader :run_method, :stop_method
-
-      def run(&block)
-        @run_method = block
-      end
-
-      def stop(&block)
-        @stop_method = block
-      end
+    def self.build(run_method:, stop_method:)
+      new(
+        run_method: run_method,
+        stop_method: stop_method,
+      ).build
     end
 
-    def self.build(&block)
-      new(block).build
-    end
-
-    def initialize(block)
-      @block = block
+    def initialize(run_method:, stop_method:)
+      @run_method = run_method
+      @stop_method = stop_method
     end
 
     def build
-      c = Context.new
-      @block.call(c)
+      run_method = @run_method
+      stop_method = @stop_method
 
       Module.new do
-        define_method(:_run, c.run_method)
-        define_method(:_stop, c.stop_method)
+        define_method(:_run, run_method)
+        define_method(:_stop, stop_method)
 
         def run
           Capra.logger.info("start worker")
-          _run('127.0.0.1', 8000 + worker_id, worker_id)
+          _run('127.0.0.1', 8000 + worker_id, worker_id, logger)
         end
 
         def stop
           Capra.logger.info("start stop")
-          _stop
+          _stop(logger)
         end
       end
     end
