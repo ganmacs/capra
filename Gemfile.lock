@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     capra (0.1.0)
+      serverengine (~> 2.0.6)
 
 GEM
   remote: https://rubygems.org/
@@ -37,6 +38,9 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.9.0)
+    serverengine (2.0.6)
+      sigdump (~> 0.2.2)
+    sigdump (0.2.4)
     unicode-display_width (1.4.0)
 
 PLATFORMS
