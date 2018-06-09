@@ -51,8 +51,8 @@ module Capra
     def build_server
       addr = @opts.delete(:addr) { |_| raise 'addr not found' }
       port = @opts.delete(:port) { |_| raise 'port not found' }
-      workers = @opts.delete(:workers) { |_| raise 'workers not found' }
       backend_type = @opts.delete(:backend_type) { |_| raise 'backend_type not found' }
+      workers = @opts.fetch(:workers) { |_| raise 'workers not found' }
 
       Capra::ServerBuilder.build(
         addr: addr,
